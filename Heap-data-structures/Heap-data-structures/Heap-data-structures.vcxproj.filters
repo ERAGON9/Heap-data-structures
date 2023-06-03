@@ -24,7 +24,10 @@
     <ClCompile Include="MinHeap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Functions.cpp">
+    <ClCompile Include="MedianHeap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HelpFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +41,10 @@
     <ClInclude Include="Pair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Functions.h">
+    <ClInclude Include="HelpFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MedianHeap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

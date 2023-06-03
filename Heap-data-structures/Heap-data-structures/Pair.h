@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-using namespace std;
 
+using namespace std;
 
 class Pair
 {
@@ -12,8 +12,7 @@ public:
 	Pair* clonePair;
 	int index_AT_Heap;
 
-	Pair()
-	{}
+	Pair(){}
 
 	Pair(int priority, string data)
 	{

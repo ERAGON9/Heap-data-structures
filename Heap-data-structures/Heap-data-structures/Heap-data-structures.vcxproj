@@ -127,14 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="MedianHeap.cpp" />
+    <ClCompile Include="HelpFunctions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaxHeap.cpp" />
     <ClCompile Include="MinHeap.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Functions.h" />
+    <ClInclude Include="HelpFunctions.h" />
     <ClInclude Include="MaxHeap.h" />
+    <ClInclude Include="MedianHeap.h" />
     <ClInclude Include="MinHeap.h" />
     <ClInclude Include="Pair.h" />
   </ItemGroup>

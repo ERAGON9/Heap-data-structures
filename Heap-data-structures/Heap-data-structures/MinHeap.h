@@ -2,7 +2,6 @@
 
 #include "Pair.h"
 
-
 class MinHeap
 {
 private:

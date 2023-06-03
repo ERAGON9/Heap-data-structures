@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include "MaxHeap.h"
-#include "Functions.h"
+#include "HelpFunctions.h"
 
 using namespace std;
 

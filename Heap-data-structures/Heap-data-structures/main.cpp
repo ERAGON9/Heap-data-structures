@@ -1,82 +1,62 @@
 
 #include <iostream>
+#include <string>
 #include "MaxHeap.h"
 #include "MinHeap.h"
-#include "Functions.h"
+#include "MedianHeap.h"
+#include "HelpFunctions.h"
 
 using namespace std;
 
-enum { MAX='a', DELETE_MAX, MIN, DELET_EMIN, CREATE_EMPTY, INSERT, MEDIAN };
-
-#define FIRST_OPERATION 'a'
-#define LAST_OPERATION 'g'
+enum { MAX='a', DELETE_MAX, MIN, DELETE_MIN, CREATE_EMPTY, INSERT, MEDIAN };
 
 int main()
 {
-	MaxHeap* H1_Max, *H2_Max; // H1 = the smallest half , H2 = the biggest half.
-	MinHeap* H1_Min, *H2_Min;
-
+	HeapMedian MHeap;
 	int n;
-	char func;
-	bool is_Memory_Allocated = false;
+	char action;
 
 	cin >> n;
-
-	if (n <= 0)
-	{
-		cout << "wrong input";
-		exit(1);
-	}
+	nValidation(n);
 
 	for (int i = 0; i < n; i++)
 	{
-		cin >> func;
+		cin >> action;
+		actionValidation(action);
 
-		if (i == 0 && func == CREATE_EMPTY)
-		{
-			is_Memory_Allocated = true;
-		}
-		else if ( (i != 0 && func == CREATE_EMPTY) || (i == 0 && func != CREATE_EMPTY)) // CREATE_EMPTY check
-		{
-			cout << "wrong input";
-			exit(1);
-		}
-		if (func < FIRST_OPERATION || func > LAST_OPERATION)
-		{
-			cout << "wrong input";
-			exit(1);
-		}
+		eValidation(i, action);
 
-		switch (func)
+		switch (action)
 		{
 			case MAX:
+				MHeap.Max();
 				break;
+
 			case DELETE_MAX:
+				MHeap.DeleteMax();
 				break;
+
 			case MIN:
+				MHeap.Min();
 				break;
-			case DELET_EMIN:
+
+			case DELETE_MIN:
+				MHeap.DeleteMin();
 				break;
+
 			case CREATE_EMPTY:
+				MHeap = HeapMedian();
 				break;
+
 			case INSERT:
+				MHeap = Insert_Validation(MHeap);
 				break;
+
 			case MEDIAN:
+				MHeap.Median();
 				break;
 		}
-	}
-
-	if (is_Memory_Allocated)
-	{
-		delete H1_Max;
-		delete H1_Min;
-		delete H2_Max;
-		delete H2_Min;
 	}
 
 }
-
-
-
-
 
