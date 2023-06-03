@@ -26,4 +26,5 @@ public:
 
 	Pair Delete(int index);
 	int getHeapSize() { return heapSize; }
+	Pair* getData() { return data; }
 };

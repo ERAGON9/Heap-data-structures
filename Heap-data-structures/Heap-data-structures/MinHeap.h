@@ -25,4 +25,5 @@ public:
 	void Insert(Pair item);
 
 	Pair Delete(int index);
+	Pair* getData() { return data; }
 };

@@ -89,13 +89,16 @@ void HeapMedian::DeleteMin()
 void HeapMedian::Insert(int priority, string value)
 {
 	Pair newPair = Pair(priority, value);
-	Pair clonePair = Pair(priority, value, &newPair);
-	newPair.clonePair = &clonePair;
+	Pair clonePair = Pair(priority, value);// , & newPair);
+	//newPair.clonePair = &clonePair;
 
 	if (heapSize == 0)
 	{
 		H1_Max.Insert(newPair);
 		H1_Min.Insert(clonePair);
+
+		H1_Max.getData()[newPair.index_AT_Heap].clonePair = &(H1_Min.getData()[clonePair.index_AT_Heap]);
+		H1_Min.getData()[clonePair.index_AT_Heap].clonePair = &(H1_Max.getData()[newPair.index_AT_Heap]);
 	}
 	else
 	{
@@ -104,6 +107,9 @@ void HeapMedian::Insert(int priority, string value)
 			H2_Max.Insert(newPair);
 			H2_Min.Insert(clonePair);
 
+			H2_Max.getData()[newPair.index_AT_Heap].clonePair = &(H2_Min.getData()[clonePair.index_AT_Heap]);
+			H2_Min.getData()[clonePair.index_AT_Heap].clonePair = &(H2_Max.getData()[newPair.index_AT_Heap]);
+
 			if (H2_Max.getHeapSize() > H1_Max.getHeapSize())
 			{
 				Pair cloneMinBiggest = H2_Min.DeleteMin();
@@ -111,6 +117,9 @@ void HeapMedian::Insert(int priority, string value)
 
 				H1_Max.Insert(minBiggest);
 				H1_Min.Insert(cloneMinBiggest);
+
+				H1_Max.getData()[minBiggest.index_AT_Heap].clonePair = &(H2_Min.getData()[clonePair.index_AT_Heap]);
+				H2_Min.getData()[clonePair.index_AT_Heap].clonePair = &(H2_Max.getData()[newPair.index_AT_Heap]);
 			}
 		}
 		else  // newPair.priority <= H1_Max->Max().priority
