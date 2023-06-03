@@ -1,8 +1,11 @@
 
 #include <iostream>
 #include "MaxHeap.h"
+#include "Functions.h"
 
 using namespace std;
+
+#define FIRST_PLACE_AT_HEAP 0
 
 MaxHeap::MaxHeap(int max)
 {
@@ -36,14 +39,6 @@ int MaxHeap::Right(int node)
 	return ((node * 2) + 2);
 }
 
-void Swap(Pair* arr, int index1, int index2)
-{
-	Pair temp = arr[index1];
-
-	arr[index1] = arr[index2];
-	arr[index2] = arr[index1];
-}
-
 void MaxHeap::FixHeap(int node) // Fixes the heap that has node as root.
 {
 	int max = node, left = Left(node), right = Right(node);
@@ -65,6 +60,17 @@ void MaxHeap::FixHeap(int node) // Fixes the heap that has node as root.
 	}
 }
 
+Pair MaxHeap::Max()
+{
+	if (heapSize == 0)
+	{
+		cout << "wrong input";
+		exit(1);
+	}
+
+	return data[FIRST_PLACE_AT_HEAP];
+}
+
 Pair MaxHeap::DeleteMax()
 {
 	if (heapSize)
@@ -73,10 +79,11 @@ Pair MaxHeap::DeleteMax()
 		exit(1);
 	}
 
-	Pair max = data[0];
+	Pair max = data[FIRST_PLACE_AT_HEAP];
 	heapSize--;
-	data[0] = data[heapSize];
-	FixHeap(0);
+	data[heapSize].index_AT_Heap = FIRST_PLACE_AT_HEAP;
+	data[FIRST_PLACE_AT_HEAP] = data[heapSize];
+	FixHeap(FIRST_PLACE_AT_HEAP);
 
 	return max;
 }
@@ -94,9 +101,11 @@ void MaxHeap::Insert(Pair item)
 
 	while ((i > 0) && (data[Parent(i)].priority < item.priority))
 	{
+		data[Parent(i)].index_AT_Heap = i;
 		data[i] = data[Parent(i)];
 		i = Parent(i);
 	}
 
+	item.index_AT_Heap = i;
 	data[i] = item;
 }

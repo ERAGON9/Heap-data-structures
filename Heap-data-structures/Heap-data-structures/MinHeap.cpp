@@ -1,8 +1,11 @@
 
 #include <iostream>
 #include "MinHeap.h"
+#include "Functions.h"
 
 using namespace std;
+
+#define FIRST_PLACE_AT_HEAP 0
 
 MinHeap::MinHeap(int max)
 {
@@ -36,14 +39,6 @@ int MinHeap::Right(int node)
 	return ((node * 2) + 2);
 }
 
-void Swap(Pair* arr, int index1, int index2)
-{
-	Pair temp = arr[index1];
-
-	arr[index1] = arr[index2];
-	arr[index2] = arr[index1];
-}
-
 void MinHeap::FixHeap(int node) // Fixes the heap that has node as root.
 {
 	int min = node, left = Left(node), right = Right(node);
@@ -65,6 +60,17 @@ void MinHeap::FixHeap(int node) // Fixes the heap that has node as root.
 	}
 }
 
+Pair MinHeap::Min()
+{
+	if (heapSize == 0)
+	{
+		cout << "wrong input";
+		exit(1);
+	}
+
+	return data[0];
+}
+
 Pair MinHeap::DeleteMin()
 {
 	if (heapSize)
@@ -73,12 +79,13 @@ Pair MinHeap::DeleteMin()
 		exit(1);
 	}
 
-	Pair max = data[0];
+	Pair min = data[FIRST_PLACE_AT_HEAP];
 	heapSize--;
-	data[0] = data[heapSize];
-	FixHeap(0);
+	data[heapSize].index_AT_Heap = FIRST_PLACE_AT_HEAP;
+	data[FIRST_PLACE_AT_HEAP] = data[heapSize];
+	FixHeap(FIRST_PLACE_AT_HEAP);
 
-	return max;
+	return min;
 }
 
 void MinHeap::Insert(Pair item)
@@ -94,9 +101,11 @@ void MinHeap::Insert(Pair item)
 
 	while ((i > 0) && (data[Parent(i)].priority > item.priority))
 	{
+		data[Parent(i)].index_AT_Heap = i;
 		data[i] = data[Parent(i)];
 		i = Parent(i);
 	}
 
+	item.index_AT_Heap = i;
 	data[i] = item;
 }

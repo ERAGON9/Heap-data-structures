@@ -22,4 +22,6 @@ public:
 	Pair Max();
 	Pair DeleteMax();
 	void Insert(Pair item);
+
+	int getHeapSize() { return heapSize; }
 };

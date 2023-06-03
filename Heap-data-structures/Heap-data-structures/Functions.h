@@ -16,3 +16,5 @@ void CreateEmpty();
 void Insert(int priority, string value);
 
 void Median();
+
+void Swap(Pair* arr, int index1, int index2);
