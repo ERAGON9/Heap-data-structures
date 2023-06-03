@@ -5,24 +5,18 @@
 
 using namespace std;
 
+#define MAX_DATA_HEAP_SIZE 100
 #define FIRST_PLACE_AT_HEAP 0
 
-MaxHeap::MaxHeap(int max)
+MaxHeap::MaxHeap()
 {
-	data = new Pair[max];
-	maxSize = max;
+	maxSize = MAX_DATA_HEAP_SIZE;
 	heapSize = 0;
 	allocated = true;
 }
 
 MaxHeap::~MaxHeap()
-{
-	if (allocated)
-	{
-		delete[] data;
-	}
-	data = NULL;
-}
+{}
 
 int MaxHeap::Parent(int node)
 {

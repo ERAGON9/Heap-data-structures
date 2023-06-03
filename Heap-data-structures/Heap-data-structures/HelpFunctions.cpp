@@ -14,11 +14,18 @@ void Swap(Pair* arr, int index1, int index2)
 {
 	Pair temp = arr[index1];
 
-	arr[index2].index_AT_Heap = index1;
 	arr[index1] = arr[index2];
+	arr[index1].index_AT_Heap = index1;
 
-	arr[index1].index_AT_Heap = index2;
-	arr[index2] = arr[index1];
+	arr[index2] = temp;
+	arr[index2].index_AT_Heap = index2;
+
+	if (arr[index1].clonePair != nullptr)
+		arr[index1].clonePair->clonePair = &arr[index1];
+
+	if (arr[index2].clonePair != nullptr)
+		arr[index2].clonePair->clonePair = &arr[index2];
+
 }
 
 void nValidation(int n)

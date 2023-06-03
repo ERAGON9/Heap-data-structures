@@ -5,24 +5,18 @@
 
 using namespace std;
 
+#define MAX_DATA_HEAP_SIZE 100
 #define FIRST_PLACE_AT_HEAP 0
 
-MinHeap::MinHeap(int max)
+MinHeap::MinHeap()
 {
-	data = new Pair[max];
-	maxSize = max;
+	maxSize = MAX_DATA_HEAP_SIZE;
 	heapSize = 0;
 	allocated = true;
 }
 
 MinHeap::~MinHeap()
-{
-	if (allocated)
-	{
-		delete[] data;
-	}
-	data = NULL;
-}
+{}
 
 int MinHeap::Parent(int node)
 {

@@ -18,6 +18,8 @@ public:
 	{
 		this->priority = priority;
 		this->data = data;
+		this->clonePair = nullptr;
+		index_AT_Heap = -1;
 	}
 
 	Pair(int priority, string data, Pair* clonePair)
@@ -25,5 +27,6 @@ public:
 		this->priority = priority;
 		this->data = data;
 		this->clonePair = clonePair;
+		index_AT_Heap = -1;
 	}
 };

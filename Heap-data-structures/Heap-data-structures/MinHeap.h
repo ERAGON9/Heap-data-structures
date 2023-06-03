@@ -2,10 +2,12 @@
 
 #include "Pair.h"
 
+#define MAX_DATA_HEAP_SIZE 100
+
 class MinHeap
 {
 private:
-	Pair* data;    // Points to data array.
+	Pair data[MAX_DATA_HEAP_SIZE];    // Points to data array.
 	int maxSize;   // Max size of heap.
 	int heapSize;  // Current size of heap.
 	bool allocated; // if heap allocated memory
@@ -16,7 +18,7 @@ private:
 	void FixHeap(int node);
 
 public:
-	MinHeap(int max);
+	MinHeap();
 	~MinHeap();
 	Pair Min();
 	Pair DeleteMin();

@@ -6,10 +6,10 @@
 
 using namespace std;
 
-#define MAX_DATA_HEAP_SIZE 100
+
 #define MAX_MEDIAN_HEAP_SIZE 200
 
-HeapMedian::HeapMedian():H1_Max(MAX_DATA_HEAP_SIZE), H1_Min(MAX_DATA_HEAP_SIZE), H2_Max(MAX_DATA_HEAP_SIZE), H2_Min(MAX_DATA_HEAP_SIZE)
+HeapMedian::HeapMedian()
 {
 	maxSize = MAX_MEDIAN_HEAP_SIZE;
 	heapSize = 0;
