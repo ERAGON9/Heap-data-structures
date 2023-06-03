@@ -49,8 +49,25 @@ void Insert(int priority, string value, MaxHeap* H1_Max, MinHeap* H1_Min, MaxHea
 
 		if (H2_Max->getHeapSize() > H1_Max->getHeapSize())
 		{
-			Pair min = H2_Min->DeleteMin();
-			H2_Max->Delete(min.clonePair->)
+			Pair cloneMinBiggest = H2_Min->DeleteMin();
+			Pair minBiggest = H2_Max->Delete(cloneMinBiggest.clonePair->index_AT_Heap);
+
+			H1_Max->Insert(minBiggest);
+			H1_Min->Insert(cloneMinBiggest);
+		}
+	}
+	else
+	{
+		H1_Max->Insert(newPair);
+		H1_Min->Insert(clonePair);
+
+		if (H1_Max->getHeapSize() > (H2_Max->getHeapSize() + 1))
+		{
+			Pair maxSmallest = H1_Max->DeleteMax();
+			Pair cloneMaxSmallest = H1_Min->Delete(maxSmallest.clonePair->index_AT_Heap);
+
+			H2_Max->Insert(maxSmallest);
+			H2_Min->Insert(cloneMaxSmallest);
 		}
 	}
 }
@@ -71,3 +88,4 @@ void Swap(Pair* arr, int index1, int index2)
 	arr[index1].index_AT_Heap = index2;
 	arr[index2] = arr[index1];
 }
+

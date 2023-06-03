@@ -73,7 +73,7 @@ Pair MaxHeap::Max()
 
 Pair MaxHeap::DeleteMax()
 {
-	if (heapSize)
+	if (heapSize == 0)
 	{
 		cout << "wrong input";
 		exit(1);
@@ -108,4 +108,38 @@ void MaxHeap::Insert(Pair item)
 
 	item.index_AT_Heap = i;
 	data[i] = item;
+}
+
+Pair MaxHeap::Delete(int index)
+{
+	if (heapSize <= index)
+	{
+		cout << "wrong input";
+		exit(1);
+	}
+
+	Pair deleted = data[index];
+	heapSize--;
+	data[heapSize].index_AT_Heap = index;
+	data[index] = data[heapSize];
+
+	if (index == 0)
+	{
+		FixHeap(FIRST_PLACE_AT_HEAP);
+	}
+	else
+	{
+		if (data[Parent(index)].priority >= data[index].priority)
+		{
+			FixHeap(index);
+		}
+		else // data[Parent(index)].priority < data[index].priority
+		{
+			while ((index != 0) && (data[Parent(index)].priority < data[index].priority))
+			{
+				Swap(data, Parent(index), index);
+			}
+		}
+	}
+	return deleted;
 }

@@ -22,4 +22,6 @@ public:
 	Pair Min();
 	Pair DeleteMin();
 	void Insert(Pair item);
+
+	Pair Delete(int index);
 };

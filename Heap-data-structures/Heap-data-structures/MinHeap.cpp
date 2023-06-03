@@ -109,3 +109,37 @@ void MinHeap::Insert(Pair item)
 	item.index_AT_Heap = i;
 	data[i] = item;
 }
+
+Pair MinHeap::Delete(int index)
+{
+	if (heapSize <= index)
+	{
+		cout << "wrong input";
+		exit(1);
+	}
+
+	Pair deleted = data[index];
+	heapSize--;
+	data[heapSize].index_AT_Heap = index;
+	data[index] = data[heapSize];
+
+	if (index == 0)
+	{
+		FixHeap(FIRST_PLACE_AT_HEAP);
+	}
+	else
+	{
+		if (data[Parent(index)].priority <= data[index].priority)
+		{
+			FixHeap(index);
+		}
+		else // data[Parent(index)].priority > data[index].priority
+		{
+			while ((index != 0) && (data[Parent(index)].priority > data[index].priority))
+			{
+				Swap(data, Parent(index), index);
+			}
+		}
+	}
+	return deleted;
+}
