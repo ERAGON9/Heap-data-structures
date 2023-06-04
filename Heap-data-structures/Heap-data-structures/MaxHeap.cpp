@@ -73,10 +73,15 @@ Pair MaxHeap::DeleteMax()
 		exit(1);
 	}
 
-	Pair max = data[FIRST_PLACE_AT_HEAP];
+	Swap(data, FIRST_PLACE_AT_HEAP, (heapSize - 1));
+
+	Pair max = data[(heapSize - 1)];
+	max.index_AT_Heap = -1;             // Out of heap => index = -1.
+	if (max.clonePair != nullptr)       // Update for the clone the pointer to this pair.
+		max.clonePair->clonePair = &max;
+
 	heapSize--;
-	data[heapSize].index_AT_Heap = FIRST_PLACE_AT_HEAP;
-	data[FIRST_PLACE_AT_HEAP] = data[heapSize];
+
 	FixHeap(FIRST_PLACE_AT_HEAP);
 
 	return max;
@@ -90,50 +95,66 @@ void MaxHeap::Insert(Pair item)
 		exit(1);
 	}
 
-	int i = heapSize;
-	heapSize++;
+	if (item.clonePair != nullptr)                       // Update clone pointer.
+		item.clonePair->clonePair = &item;
 
-	while ((i > 0) && (data[Parent(i)].priority < item.priority))
+	data[heapSize] = item;                               // Insert.
+	data[heapSize].index_AT_Heap = heapSize;
+	if (data[heapSize].clonePair != nullptr)            // Update for the clone the pointer to this pair.
+		data[heapSize].clonePair->clonePair = &(data[heapSize]);
+
+	int index = heapSize;
+	
+	while ((index > FIRST_PLACE_AT_HEAP) && (data[index].priority > data[Parent(index)].priority)) // Fix the heap from sown to up.
 	{
-		data[Parent(i)].index_AT_Heap = i;
-		data[i] = data[Parent(i)];
-		i = Parent(i);
+		Swap(data, index, Parent(index));
+		index = Parent(index);
 	}
 
-	item.index_AT_Heap = i;
-	data[i] = item;
+	heapSize++;
+
 }
 
 Pair MaxHeap::Delete(int index)
 {
+	Pair deleted;
+
 	if (heapSize <= index)
 	{
 		cout << "wrong input";
 		exit(1);
 	}
 
-	Pair deleted = data[index];
-	heapSize--;
-	data[heapSize].index_AT_Heap = index;
-	data[index] = data[heapSize];
-
-	if (index == 0)
+	if (index == 0)  // Delete the first pair.
 	{
-		FixHeap(FIRST_PLACE_AT_HEAP);
+		deleted = DeleteMax();
+		if (deleted.clonePair != nullptr)             // Update for the clone the pointer to this pair.
+			deleted.clonePair->clonePair = &deleted;
 	}
-	else
+	else            // Delete middle pair.
 	{
-		if (data[Parent(index)].priority >= data[index].priority)
+
+		Swap(data, index, (heapSize - 1));
+
+		deleted = data[heapSize - 1];
+		deleted.index_AT_Heap = -1;                  // Out of heap => index = -1.
+		if (deleted.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			deleted.clonePair->clonePair = &deleted;
+
+		heapSize--;
+
+		if (data[index].priority < data[Parent(index)].priority)   // Fix the heap from index down.
 		{
 			FixHeap(index);
 		}
-		else // data[Parent(index)].priority < data[index].priority
+		else // data[index].priority > data[Parent(index)].priority
 		{
-			while ((index != 0) && (data[Parent(index)].priority < data[index].priority))
+			while ((index > 0) && (data[index].priority > data[Parent(index)].priority)) // Fix the heap from index to up.
 			{
-				Swap(data, Parent(index), index);
+				Swap(data, index, Parent(index));
 			}
 		}
 	}
+
 	return deleted;
 }

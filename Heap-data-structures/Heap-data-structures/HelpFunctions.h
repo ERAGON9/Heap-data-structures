@@ -10,4 +10,10 @@ void eValidation(int i, char action);
 
 void actionValidation(char action);
 
+void notEmptySentenceValidation(char action);
+
+void EndSentenceValidation();
+
 HeapMedian Insert_Validation(HeapMedian MHeap);
+
+void checkSpaceValidation();

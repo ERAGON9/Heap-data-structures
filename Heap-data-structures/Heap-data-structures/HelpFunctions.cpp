@@ -10,21 +10,21 @@ enum { MAX = 'a', DELETE_MAX, MIN, DELETE_MIN, CREATE_EMPTY, INSERT, MEDIAN };
 #define FIRST_OPERATION 'a'
 #define LAST_OPERATION 'g'
 
-void Swap(Pair* arr, int index1, int index2)
+void Swap(Pair* heapArr, int index1, int index2)
 {
-	Pair temp = arr[index1];
+	Pair temp = heapArr[index1];
 
-	arr[index1] = arr[index2];
-	arr[index1].index_AT_Heap = index1;
+	heapArr[index1] = heapArr[index2];
+	heapArr[index1].index_AT_Heap = index1;
 
-	arr[index2] = temp;
-	arr[index2].index_AT_Heap = index2;
+	heapArr[index2] = temp;
+	heapArr[index2].index_AT_Heap = index2;
 
-	if (arr[index1].clonePair != nullptr)
-		arr[index1].clonePair->clonePair = &arr[index1];
+	if (heapArr[index1].clonePair != nullptr)
+		heapArr[index1].clonePair->clonePair = &(heapArr[index1]);
 
-	if (arr[index2].clonePair != nullptr)
-		arr[index2].clonePair->clonePair = &arr[index2];
+	if (heapArr[index2].clonePair != nullptr)
+		heapArr[index2].clonePair->clonePair = &(heapArr[index2]);
 
 }
 
@@ -55,27 +55,70 @@ void actionValidation(char action)
 	}
 }
 
+void notEmptySentenceValidation(char action)
+{
+	if (action == '\n')
+	{
+		cout << "wrong input";
+		exit(1);
+	}
+}
+
+void EndSentenceValidation()
+{
+	string data;
+
+	getline(cin, data);
+
+	if (data != "\n")
+	{
+		cout << "wrong input";
+		exit(1);
+	}
+}
+
 HeapMedian Insert_Validation(HeapMedian MHeap)
 {
-	string number, data;
+	string numberAsString, data;
 	int priority;
 
-	cin >> number;
-	for (char ch : number)
+	checkSpaceValidation();
+
+	cin >> numberAsString;
+	for (char ch : numberAsString)
 	{
-		if (ch < '0' || ch > '9')
+		if (ch == numberAsString[0])
+		{
+			if ((ch != '-') && (ch < '0' || ch > '9'))
+			{
+				cout << "wrong input";
+				exit(1);
+			}
+		}
+		else if (ch < '0' || ch > '9')  //ch != numberAsString[0]
 		{
 			cout << "wrong input";
 			exit(1);
 		}
 	}
-	priority = stoi(number);
+	priority = stoi(numberAsString);
 
-	getchar();
+	checkSpaceValidation();
 
 	getline(cin, data);
 
 	MHeap.Insert(priority, data);
 
 	return MHeap;
+}
+
+void checkSpaceValidation()
+{
+	char space = getchar(); // for the  space (" ").
+
+	if (space != ' ')
+	{
+		cout << "wrong input";
+		exit(1);
+	}
 }

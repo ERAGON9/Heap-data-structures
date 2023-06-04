@@ -26,7 +26,7 @@ void HeapMedian::Max()
 		exit(1);
 	}
 
-	cout << H2_Max.Max().priority << " " << H2_Max.Max().data;
+	cout << H2_Max.Max().priority << " " << H2_Max.Max().data << endl;
 }
 
 void HeapMedian::DeleteMax()
@@ -38,18 +38,28 @@ void HeapMedian::DeleteMax()
 	}
 
 	Pair max = H2_Max.DeleteMax();
+	if (max.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+		max.clonePair->clonePair = &max;
+
 	Pair clonemax = H2_Min.Delete(max.clonePair->index_AT_Heap);
+	if (clonemax.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+		clonemax.clonePair->clonePair = &clonemax;
 
 	if (H1_Max.getHeapSize() > (H2_Max.getHeapSize() + 1))
 	{
 		Pair maxSmallest = H1_Max.DeleteMax();
+		if (maxSmallest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			maxSmallest.clonePair->clonePair = &maxSmallest;
+
 		Pair cloneMaxSmallest = H1_Min.Delete(maxSmallest.clonePair->index_AT_Heap);
+		if (cloneMaxSmallest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			cloneMaxSmallest.clonePair->clonePair = &cloneMaxSmallest;
 
 		H2_Max.Insert(maxSmallest);
 		H2_Min.Insert(cloneMaxSmallest);
 	}
 
-	cout << max.priority << " " << max.data;
+	cout << max.priority << " " << max.data << endl;
 }
 
 void HeapMedian::Min()
@@ -60,7 +70,7 @@ void HeapMedian::Min()
 		exit(1);
 	}
 
-	cout << H1_Min.Min().priority << " " << H1_Min.Min().data;
+	cout << H1_Min.Min().priority << " " << H1_Min.Min().data << endl;
 }
 
 void HeapMedian::DeleteMin()
@@ -72,54 +82,60 @@ void HeapMedian::DeleteMin()
 	}
 
 	Pair cloneMin = H1_Min.DeleteMin();
+	if (cloneMin.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+		cloneMin.clonePair->clonePair = &cloneMin;
+
 	Pair min = H1_Max.Delete(cloneMin.clonePair->index_AT_Heap);
+	if (min.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+		min.clonePair->clonePair = &min;
 
 	if (H2_Max.getHeapSize() > H1_Max.getHeapSize())
 	{
 		Pair cloneMinBiggest = H2_Min.DeleteMin();
+		if (cloneMinBiggest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			cloneMinBiggest.clonePair->clonePair = &cloneMinBiggest;
+
 		Pair minBiggest = H2_Max.Delete(cloneMinBiggest.clonePair->index_AT_Heap);
+		if (minBiggest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			minBiggest.clonePair->clonePair = &minBiggest;
 
 		H1_Max.Insert(minBiggest);
 		H1_Min.Insert(cloneMinBiggest);
 	}
 
-	cout << min.priority << " " << min.data;
+	cout << min.priority << " " << min.data << endl;
 }
 
 void HeapMedian::Insert(int priority, string value)
 {
 	Pair newPair = Pair(priority, value);
-	Pair clonePair = Pair(priority, value);// , & newPair);
-	//newPair.clonePair = &clonePair;
+	Pair clonePair = Pair(priority, value, &newPair);
+	newPair.clonePair = &clonePair;
 
-	if (heapSize == 0)
+	if (heapSize == 0)    // Insert pair to Empty heap.
 	{
 		H1_Max.Insert(newPair);
 		H1_Min.Insert(clonePair);
-
-		H1_Max.getData()[newPair.index_AT_Heap].clonePair = &(H1_Min.getData()[clonePair.index_AT_Heap]);
-		H1_Min.getData()[clonePair.index_AT_Heap].clonePair = &(H1_Max.getData()[newPair.index_AT_Heap]);
 	}
-	else
+	else                  // Insert pair to Heap with data(pairs).
 	{
 		if (newPair.priority > H1_Max.Max().priority)
 		{
 			H2_Max.Insert(newPair);
 			H2_Min.Insert(clonePair);
 
-			H2_Max.getData()[newPair.index_AT_Heap].clonePair = &(H2_Min.getData()[clonePair.index_AT_Heap]);
-			H2_Min.getData()[clonePair.index_AT_Heap].clonePair = &(H2_Max.getData()[newPair.index_AT_Heap]);
-
 			if (H2_Max.getHeapSize() > H1_Max.getHeapSize())
 			{
 				Pair cloneMinBiggest = H2_Min.DeleteMin();
+				if (cloneMinBiggest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+					cloneMinBiggest.clonePair->clonePair = &cloneMinBiggest;
+
 				Pair minBiggest = H2_Max.Delete(cloneMinBiggest.clonePair->index_AT_Heap);
+				if (minBiggest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+					minBiggest.clonePair->clonePair = &minBiggest;
 
 				H1_Max.Insert(minBiggest);
 				H1_Min.Insert(cloneMinBiggest);
-
-				H1_Max.getData()[minBiggest.index_AT_Heap].clonePair = &(H2_Min.getData()[clonePair.index_AT_Heap]);
-				H2_Min.getData()[clonePair.index_AT_Heap].clonePair = &(H2_Max.getData()[newPair.index_AT_Heap]);
 			}
 		}
 		else  // newPair.priority <= H1_Max->Max().priority
@@ -130,7 +146,12 @@ void HeapMedian::Insert(int priority, string value)
 			if (H1_Max.getHeapSize() > (H2_Max.getHeapSize() + 1))
 			{
 				Pair maxSmallest = H1_Max.DeleteMax();
+				if (maxSmallest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+					maxSmallest.clonePair->clonePair = &maxSmallest;
+
 				Pair cloneMaxSmallest = H1_Min.Delete(maxSmallest.clonePair->index_AT_Heap);
+				if (maxSmallest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+					maxSmallest.clonePair->clonePair = &maxSmallest;
 
 				H2_Max.Insert(maxSmallest);
 				H2_Min.Insert(cloneMaxSmallest);
@@ -149,5 +170,5 @@ void HeapMedian::Median()
 		exit(1);
 	}
 
-	cout << H1_Max.Max().priority << " " << H1_Max.Max().data;
+	cout << H1_Max.Max().priority << " " << H1_Max.Max().data << endl;
 }

@@ -8,7 +8,7 @@
 
 using namespace std;
 
-enum { MAX='a', DELETE_MAX, MIN, DELETE_MIN, CREATE_EMPTY, INSERT, MEDIAN };
+enum { MAX='a', DELETE_MAX='b', MIN='c', DELETE_MIN='d', CREATE_EMPTY='e', INSERT='f', MEDIAN='g' };
 
 int main()
 {
@@ -22,6 +22,9 @@ int main()
 	for (int i = 0; i < n; i++)
 	{
 		cin >> action;
+
+		notEmptySentenceValidation(action);
+
 		actionValidation(action);
 
 		eValidation(i, action);
@@ -58,5 +61,8 @@ int main()
 		}
 	}
 
+	EndSentenceValidation();
+
+	return 0;
 }
 
