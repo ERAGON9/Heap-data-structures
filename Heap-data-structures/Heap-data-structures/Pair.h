@@ -12,7 +12,13 @@ public:
 	Pair* clonePair;
 	int index_AT_Heap;
 
-	Pair(){}
+	Pair()
+	{
+		priority = 0;
+		data = "";
+		clonePair = nullptr;
+		index_AT_Heap = -1;
+	}
 
 	Pair(int priority, string data)
 	{

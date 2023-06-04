@@ -73,7 +73,8 @@ Pair MaxHeap::DeleteMax()
 		exit(1);
 	}
 
-	Swap(data, FIRST_PLACE_AT_HEAP, (heapSize - 1));
+	if (FIRST_PLACE_AT_HEAP != (heapSize - 1))
+		Swap(data, FIRST_PLACE_AT_HEAP, (heapSize - 1));
 
 	Pair max = data[(heapSize - 1)];
 	max.index_AT_Heap = -1;             // Out of heap => index = -1.
@@ -104,15 +105,13 @@ void MaxHeap::Insert(Pair item)
 		data[heapSize].clonePair->clonePair = &(data[heapSize]);
 
 	int index = heapSize;
-	
+	heapSize++;
+
 	while ((index > FIRST_PLACE_AT_HEAP) && (data[index].priority > data[Parent(index)].priority)) // Fix the heap from sown to up.
 	{
 		Swap(data, index, Parent(index));
 		index = Parent(index);
 	}
-
-	heapSize++;
-
 }
 
 Pair MaxHeap::Delete(int index)
@@ -127,20 +126,20 @@ Pair MaxHeap::Delete(int index)
 
 	if (index == 0)  // Delete the first pair.
 	{
-		deleted = DeleteMax();
+		deleted = DeleteMax();                        // Also doing heapSize-- !
 		if (deleted.clonePair != nullptr)             // Update for the clone the pointer to this pair.
 			deleted.clonePair->clonePair = &deleted;
 	}
 	else            // Delete middle pair.
 	{
-
-		Swap(data, index, (heapSize - 1));
+		if (index != (heapSize - 1))
+			Swap(data, index, (heapSize - 1));
 
 		deleted = data[heapSize - 1];
 		deleted.index_AT_Heap = -1;                  // Out of heap => index = -1.
 		if (deleted.clonePair != nullptr)            // Update for the clone the pointer to this pair.
 			deleted.clonePair->clonePair = &deleted;
-
+		
 		heapSize--;
 
 		if (data[index].priority < data[Parent(index)].priority)   // Fix the heap from index down.

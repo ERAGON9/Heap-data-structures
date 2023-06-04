@@ -31,34 +31,50 @@ void HeapMedian::Max()
 
 void HeapMedian::DeleteMax()
 {
-	if (heapSize == 0)
+	Pair max, clonemax;
+
+	if (heapSize == 0) // Heap is empty.
 	{
 		cout << "wrong input";
 		exit(1);
 	}
 
-	Pair max = H2_Max.DeleteMax();
-	if (max.clonePair != nullptr)            // Update for the clone the pointer to this pair.
-		max.clonePair->clonePair = &max;
-
-	Pair clonemax = H2_Min.Delete(max.clonePair->index_AT_Heap);
-	if (clonemax.clonePair != nullptr)            // Update for the clone the pointer to this pair.
-		clonemax.clonePair->clonePair = &clonemax;
-
-	if (H1_Max.getHeapSize() > (H2_Max.getHeapSize() + 1))
+	if (H2_Max.getHeapSize() > 0) // max heap not empty. (will be empty just if there is 0 or 1 pairs in the median heap!)
 	{
-		Pair maxSmallest = H1_Max.DeleteMax();
-		if (maxSmallest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
-			maxSmallest.clonePair->clonePair = &maxSmallest;
+		max = H2_Max.DeleteMax();
+		if (max.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			max.clonePair->clonePair = &max;
 
-		Pair cloneMaxSmallest = H1_Min.Delete(maxSmallest.clonePair->index_AT_Heap);
-		if (cloneMaxSmallest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
-			cloneMaxSmallest.clonePair->clonePair = &cloneMaxSmallest;
+		clonemax = H2_Min.Delete(max.clonePair->index_AT_Heap);
+		if (clonemax.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			clonemax.clonePair->clonePair = &clonemax;
 
-		H2_Max.Insert(maxSmallest);
-		H2_Min.Insert(cloneMaxSmallest);
+		if (H1_Max.getHeapSize() > (H2_Max.getHeapSize() + 1))
+		{
+			Pair maxSmallest = H1_Max.DeleteMax();
+			if (maxSmallest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+				maxSmallest.clonePair->clonePair = &maxSmallest;
+
+			Pair cloneMaxSmallest = H1_Min.Delete(maxSmallest.clonePair->index_AT_Heap);
+			if (cloneMaxSmallest.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+				cloneMaxSmallest.clonePair->clonePair = &cloneMaxSmallest;
+
+			H2_Max.Insert(maxSmallest);
+			H2_Min.Insert(cloneMaxSmallest);
+		}
+	}
+	else // H1_Max.getHeapSize() == 1 
+	{
+		clonemax = H1_Min.DeleteMin();
+		if (clonemax.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			clonemax.clonePair->clonePair = &clonemax;
+
+		max = H1_Max.Delete(max.clonePair->index_AT_Heap);
+		if (max.clonePair != nullptr)            // Update for the clone the pointer to this pair.
+			max.clonePair->clonePair = &max;
 	}
 
+	heapSize--;
 	cout << max.priority << " " << max.data << endl;
 }
 
@@ -103,6 +119,7 @@ void HeapMedian::DeleteMin()
 		H1_Min.Insert(cloneMinBiggest);
 	}
 
+	heapSize--;
 	cout << min.priority << " " << min.data << endl;
 }
 
@@ -119,7 +136,7 @@ void HeapMedian::Insert(int priority, string value)
 	}
 	else                  // Insert pair to Heap with data(pairs).
 	{
-		if (newPair.priority > H1_Max.Max().priority)
+		if (newPair.priority > H1_Max.Max().priority)  // newPair.priority > median priority.
 		{
 			H2_Max.Insert(newPair);
 			H2_Min.Insert(clonePair);
@@ -138,7 +155,7 @@ void HeapMedian::Insert(int priority, string value)
 				H1_Min.Insert(cloneMinBiggest);
 			}
 		}
-		else  // newPair.priority <= H1_Max->Max().priority
+		else  // newPair.priority <= H1_Max->Max().priority (<= median priority)
 		{
 			H1_Max.Insert(newPair);
 			H1_Min.Insert(clonePair);
